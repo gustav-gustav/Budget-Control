@@ -30,8 +30,8 @@ def formatação(m):
             v = ppv(str(input(m)))
             return v
         except ValueError:
-            print('\nVocê digitou um ou mais caracteres inválidos. '
-                  'Digite apenas números, separando as casas decimais com ponto ou vírgula!\n')
+            print('\nYou  typed one or more invalid characters. '
+                  'Type only numbers, splitting the decimals with either dots or commas!\n')
             continue
 
 
@@ -53,14 +53,14 @@ def sum_files(_type):
                 with open(name) as f:
                     contents = f.read()
                     x = contents.split()
-                    x = list(map(int, x))
+                    x = list(map(float, x))
                     number = sum(x)
                     number_list.append(number)
                     sum_number_list = sum(number_list)
 
             else:
                 with open(name) as f:
-                    number = int(f.read())
+                    number = float(f.read())
                     number_list.append(number)
                     sum_number_list = sum(number_list)
 
@@ -86,7 +86,7 @@ def get_file_name(category, _type):
 def action_file(file, mode='r', amount=0):
     if mode == 'w':
         with open(file, mode) as f:
-            value = int(f.write(amount))
+            value = float(f.write(amount))
             return value
 
     elif mode == 'a':
@@ -100,7 +100,7 @@ def action_file(file, mode='r', amount=0):
 
 
 def get_budget():
-    budget = int(action_file(get_file_name('budget', 'data')))
+    budget = float(action_file(get_file_name('budget', 'data')))
     return budget
 
 
@@ -113,19 +113,18 @@ def set_limit(category, amount):
     budget = get_budget()
     total_limits = sum_files('limit')
     soma = amount + total_limits
+    filepath_categorias = get_file_name('categorias', 'data')
+    contents = action_file(filepath_categorias)
+
     if budget == 0:
         print('\nYou have to register an income first! \nFor that you can use the command "add money" and type in the amount.\n')
 
-    elif soma > budget:
+    elif soma > budget and category not in contents:
         sobra = budget - total_limits
         print('The limit exceeded your budget. \nYou have ${} left on your budget'.format(sobra))
 
     else:
-        category = try_cat(category)
-
-        filepath_categorias = get_file_name('categorias', 'data')
-        contents = action_file(filepath_categorias)
-
+        category = try_cat(category)        
         if category not in contents:
             action_file(filepath_categorias, mode='a', amount=(category + ' '))
 
@@ -151,10 +150,10 @@ def spend(category, amount):
         print('\nYou have to register an income first! \nFor that you can use the command "add money" and type in the amount.\n')
 
     action_file(filepath_spend, mode='a', amount=(str(amount) + '\n'))
-    limit = int(action_file(filepath_limit))
+    limit = float(action_file(filepath_limit))
     fs_contents = action_file(filepath_spend)
     number_list = fs_contents.split()
-    number_list = list(map(int, number_list))
+    number_list = list(map(float, number_list))
     number = sum(number_list)
     saldo = limit - number
     print('\nYou just spent ${} on {}. \nYour limit is ${} \nYou stil have ${} on that category\n'.format(str(amount), category, str(limit), str(saldo)))
@@ -184,7 +183,7 @@ def print_stats():
     for name in files:
         try:
             with open(name, 'r')as fl:
-                limit = int(fl.read())
+                limit = float(fl.read())
                 name_list = name.split('\\', )
                 file_name = (name_list[len(name_list) - 1])
                 file_name = file_name.split('.')
