@@ -121,7 +121,7 @@ def set_limit(category, amount):
 
     elif soma > budget and category not in contents:
         sobra = budget - total_limits
-        print('The limit exceeded your budget. \nYou have ${} left on your budget'.format(sobra))
+        print('\nThe limit exceeded your budget. \nYou have ${} left on your budget\n'.format(sobra))
 
     else:
         category = try_cat(category)        
@@ -241,7 +241,7 @@ def prompt():
             print('\nType a valid command\n')
 
 
-# prompt()
+prompt()
 
 # you can set the commands here too as a quick way to set limits and spend
 # but you'll have to comment out "prompt()"
